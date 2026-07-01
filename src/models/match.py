@@ -12,6 +12,9 @@ class MatchResult(Base):
     # Primary key
     match_id = Column(String, primary_key=True)
     
+    # Tenant context
+    tenant_id = Column(String, nullable=False)
+    
     # Schema version
     schema_version = Column(String, nullable=False, default="1.0")
     

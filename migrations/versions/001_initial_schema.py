@@ -21,6 +21,7 @@ def upgrade():
     op.create_table(
         'role_definitions',
         sa.Column('role_id', sa.String(), nullable=False),
+        sa.Column('tenant_id', sa.String(), nullable=False),
         sa.Column('schema_version', sa.String(), nullable=False, server_default='1.0'),
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('description', sa.String(), nullable=False),
@@ -41,6 +42,7 @@ def upgrade():
     op.create_table(
         'personal_profiles',
         sa.Column('profile_id', sa.String(), nullable=False),
+        sa.Column('tenant_id', sa.String(), nullable=False),
         sa.Column('schema_version', sa.String(), nullable=False, server_default='1.0'),
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('skills', postgresql.JSON(), nullable=False),
@@ -61,6 +63,7 @@ def upgrade():
     op.create_table(
         'match_results',
         sa.Column('match_id', sa.String(), nullable=False),
+        sa.Column('tenant_id', sa.String(), nullable=False),
         sa.Column('schema_version', sa.String(), nullable=False, server_default='1.0'),
         sa.Column('profile_id', sa.String(), nullable=False),
         sa.Column('role_id', sa.String(), nullable=False),
@@ -86,6 +89,7 @@ def upgrade():
     op.create_table(
         'project_definitions',
         sa.Column('project_id', sa.String(), nullable=False),
+        sa.Column('tenant_id', sa.String(), nullable=False),
         sa.Column('schema_version', sa.String(), nullable=False, server_default='1.0'),
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('description', sa.String(), nullable=False),
@@ -102,6 +106,7 @@ def upgrade():
     op.create_table(
         'agent_definitions',
         sa.Column('agent_id', sa.String(), nullable=False),
+        sa.Column('tenant_id', sa.String(), nullable=False),
         sa.Column('schema_version', sa.String(), nullable=False, server_default='1.0'),
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('agent_type', sa.String(), nullable=False),
@@ -120,6 +125,7 @@ def upgrade():
     op.create_table(
         'override_logs',
         sa.Column('override_id', sa.String(), nullable=False),
+        sa.Column('tenant_id', sa.String(), nullable=False),
         sa.Column('schema_version', sa.String(), nullable=False, server_default='1.0'),
         sa.Column('entity_type', sa.String(), nullable=False),
         sa.Column('entity_id', sa.String(), nullable=False),
@@ -137,6 +143,7 @@ def upgrade():
     op.create_table(
         'weight_configurations',
         sa.Column('config_id', sa.String(), nullable=False),
+        sa.Column('tenant_id', sa.String(), nullable=False),
         sa.Column('schema_version', sa.String(), nullable=False, server_default='1.0'),
         sa.Column('scope', sa.String(), nullable=False),
         sa.Column('scope_id', sa.String(), nullable=True),
