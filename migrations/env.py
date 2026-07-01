@@ -34,6 +34,14 @@ from src.models.project import ProjectDefinition
 from src.models.agent import AgentDefinition
 from src.models.override import OverrideLog
 from src.models.weight import WeightConfiguration
+from src.models.governance import (
+    GovernanceConfig,
+    PilotConfiguration,
+    PilotMetrics,
+    Escalation,
+    GovernanceAuditLog,
+    JobDescriptionGovernance
+)
 from src.core.database import Base
 
 target_metadata = Base.metadata
