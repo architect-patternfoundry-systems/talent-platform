@@ -729,9 +729,9 @@ async def get_job_governance(
 @router.put("/job-governance/{governance_id}/validate", response_model=JobDescriptionGovernanceResponse)
 async def validate_job_governance(
     governance_id: str,
+    request,
     validation_status: str,
     validation_feedback: Optional[str] = None,
-    request,
     db: Session = Depends(get_db)
 ):
     """Validate job description (Data Governance Team)"""
@@ -775,8 +775,8 @@ async def validate_job_governance(
 @router.put("/job-governance/{governance_id}/approve", response_model=JobDescriptionGovernanceResponse)
 async def approve_job_governance(
     governance_id: str,
-    nvedo_feedback: Optional[str] = None,
     request,
+    nvedo_feedback: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     """Approve job description (NVEDO)"""
@@ -818,9 +818,9 @@ async def approve_job_governance(
 @router.put("/job-governance/{governance_id}/reject", response_model=JobDescriptionGovernanceResponse)
 async def reject_job_governance(
     governance_id: str,
+    request,
     rejection_reason: str,
     rejection_category: str,
-    request,
     db: Session = Depends(get_db)
 ):
     """Reject job description (NVEDO)"""
