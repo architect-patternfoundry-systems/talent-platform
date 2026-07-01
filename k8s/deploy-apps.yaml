@@ -1,0 +1,179 @@
+# Talent Platform Application Fleet
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: talent-platform-api
+  namespace: talent-platform-dev
+  labels:
+    resilience-tier: critical
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: talent-platform-api
+  template:
+    metadata:
+      labels:
+        app: talent-platform-api
+        env.talent-platform.io/mode: dev
+        resilience-tier: critical
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: cortex
+      tolerations:
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      initContainers:
+      - name: wait-for-db
+        image: busybox:1.36
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            until nc -z pgbouncer.infra-data.svc.cluster.local 5432; do echo waiting for db...; sleep 2; done
+      containers:
+      - name: api
+        image: registry-bridge.tailc2cafc.ts.net/talent-platform:latest
+        args: ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 1
+          failureThreshold: 3
+          successThreshold: 1
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 1
+          failureThreshold: 3
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://cortex_db_admin:XwYcij2BguKzVlEdlsKJu1@pgbouncer.infra-data.svc.cluster.local:5432/talent_platform"
+        - name: SECRET_KEY
+          value: "6363e2088f1482e0c3561b5895ba8f06c714ef15eaab40e5c88843f71dce5482"
+        - name: ALGORITHM
+          value: "HS256"
+        - name: ACCESS_TOKEN_EXPIRE_MINUTES
+          value: "30"
+        - name: OIDC_ISSUER_URL
+          value: "https://your-oidc-provider.com"
+        - name: OIDC_CLIENT_ID
+          value: "your-client-id"
+        - name: OIDC_CLIENT_SECRET
+          value: "your-client-secret"
+        - name: OIDC_AUDIENCE
+          value: "your-audience"
+        - name: PYTHONPATH
+          value: "/app"
+        - name: PYTHONDONTWRITEBYTECODE
+          value: "1"
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh","-c","sleep 15"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: talent-platform-api
+  namespace: talent-platform-dev
+spec:
+  selector:
+    app: talent-platform-api
+  ports:
+  - port: 8000
+    targetPort: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: talent-platform-dev
+  namespace: talent-platform-dev
+  labels:
+    sovereign.locus/project: talent-platform
+    env.talent-platform.io/mode: dev
+spec:
+  ingressClassName: tailscale
+  tls:
+  - hosts:
+    - talent-platform-dev.tailc2cafc.ts.net
+  rules:
+  - host: talent-platform-dev.tailc2cafc.ts.net
+    http:
+      paths:
+      - path: /v1
+        pathType: Prefix
+        backend:
+          service:
+            name: talent-platform-api
+            port:
+              number: 8000
+      - path: /health
+        pathType: Prefix
+        backend:
+          service:
+            name: talent-platform-api
+            port:
+              number: 8000
+      - path: /docs
+        pathType: Prefix
+        backend:
+          service:
+            name: talent-platform-api
+            port:
+              number: 8000
+      - path: /redoc
+        pathType: Prefix
+        backend:
+          service:
+            name: talent-platform-api
+            port:
+              number: 8000
+      - path: /auth
+        pathType: Prefix
+        backend:
+          service:
+            name: talent-platform-api
+            port:
+              number: 8000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: talent-platform-api
+            port:
+              number: 8000
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: talent-platform-api-pdb
+  namespace: talent-platform-dev
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: talent-platform-api
