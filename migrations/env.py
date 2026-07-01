@@ -27,9 +27,16 @@ if config.config_file_name is not None:
 
 # add your model's Meta object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = None
+from src.models.role import RoleDefinition
+from src.models.profile import PersonalProfile
+from src.models.match import MatchResult
+from src.models.project import ProjectDefinition
+from src.models.agent import AgentDefinition
+from src.models.override import OverrideLog
+from src.models.weight import WeightConfiguration
+from src.core.database import Base
+
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
