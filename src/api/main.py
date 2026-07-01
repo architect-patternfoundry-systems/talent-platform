@@ -1,6 +1,7 @@
 """Main application entry point"""
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from src.core.database import get_db
 
 app = FastAPI(
     title="Talent and Agent Orchestration Platform",
@@ -29,3 +30,28 @@ async def health():
             "status": "healthy"
         }
     )
+
+
+@app.get("/db-health")
+async def db_health():
+    """Database health check endpoint"""
+    try:
+        from sqlalchemy import text
+        db = next(get_db())
+        db.execute(text("SELECT 1"))
+        db.close()
+        return JSONResponse(
+            content={
+                "status": "healthy",
+                "database": "connected"
+            }
+        )
+    except Exception as e:
+        return JSONResponse(
+            content={
+                "status": "unhealthy",
+                "database": "disconnected",
+                "error": str(e)
+            },
+            status_code=503
+        )

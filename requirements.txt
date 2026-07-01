@@ -16,6 +16,7 @@ python-multipart==0.0.6
 # Data validation
 pydantic==2.5.0
 pydantic-settings==2.1.0
+pydantic-core==2.14.3
 
 # HTTP client
 httpx==0.25.0
