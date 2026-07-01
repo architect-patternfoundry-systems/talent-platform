@@ -1,4 +1,4 @@
 """API endpoints"""
-from src.api import roles, profiles, matching
+from src.api import roles, profiles, matching, visualization, recommendation, override
 
-__all__ = ["roles", "profiles", "matching"]
+__all__ = ["roles", "profiles", "matching", "visualization", "recommendation", "override"]
