@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from src.core.database import get_db
 from src.core.middleware import tenant_context_middleware, get_current_tenant_id, get_db_with_tenant_context
 from src.core.auth import create_access_token
-from src.api import roles, profiles
+from src.api import roles, profiles, matching
 
 app = FastAPI(
     title="Talent and Agent Orchestration Platform",
@@ -18,6 +18,7 @@ app.middleware("http")(tenant_context_middleware)
 # Include routers
 app.include_router(roles.router)
 app.include_router(profiles.router)
+app.include_router(matching.router)
 
 
 @app.get("/")
