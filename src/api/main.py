@@ -47,6 +47,52 @@ async def health():
     )
 
 
+@app.get("/about")
+async def about():
+    """About page with TAO philosophy connection"""
+    return JSONResponse(
+        content={
+            "name": "Talent and Agent Orchestration Platform",
+            "acronym": "TAO",
+            "version": "0.1.0",
+            "philosophy": {
+                "title": "The TAO Connection",
+                "description": "Tao (or Dao) is a foundational concept in Chinese philosophy and religion. Literally translating to 'way,' 'path,' or 'principle', it represents the natural, unnameable flow of the universe.",
+                "key_aspects": [
+                    {
+                        "aspect": "The Unknowable Source",
+                        "description": "In Taoism, the Tao is considered the ultimate, formless origin of all existence. It is the driving force behind the continuous cycle of change in nature."
+                    },
+                    {
+                        "aspect": "The Path of Harmony",
+                        "description": "It signifies the ideal way of living, which involves going with the flow of life rather than forcing, controlling, or resisting it."
+                    },
+                    {
+                        "aspect": "Action Through Inaction (Wu Wei)",
+                        "description": "Translates to effortless action. It means acting in alignment with the natural rhythm of things, allowing tasks and life events to unfold without unnecessary struggle."
+                    },
+                    {
+                        "aspect": "The 'Way' of a Craft",
+                        "description": "In a broader context, 'tao' is often used to describe the mastery, method, or guiding principle of any specific art or activity."
+                    }
+                ],
+                "platform_connection": {
+                    "title": "TAO Platform Philosophy",
+                    "description": "Our Talent and Agent Orchestration Platform embodies these principles through:",
+                    "alignments": [
+                        "Natural Flow: Orchestrating talent and agents in seamless harmony",
+                        "Effortless Action: Enabling human-AI collaboration without unnecessary friction",
+                        "Balance of Opposites: Finding the perfect equilibrium between human creativity and AI capability",
+                        "The Way of Craft: Mastering the art of talent orchestration through intelligent systems"
+                    ]
+                },
+                "everyday_application": "To live in accordance with the Tao means to quiet the ego, reduce personal resistance, and embrace a mindset of balance, simplicity, and flexibility.",
+                "note": "In Philippine languages (Tagalog/Bisaya), 'tao' simply means 'person,' 'human,' or 'alive' - a beautiful reminder that at the center of all orchestration, we serve people."
+            }
+        }
+    )
+
+
 @app.get("/db-health")
 async def db_health():
     """Database health check endpoint"""
