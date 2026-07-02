@@ -90,7 +90,7 @@ def upgrade():
         sa.Column('hr_bp_satisfaction', sa.Float(), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-        sa.ForeignKeyConstraint(['pilot_id'], ['pilot_configuration'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['pilot_id'], ['pilot_configuration.pilot_id'], ondelete='CASCADE'),
         sa.PrimaryKeyConstraint('metrics_id')
     )
     
@@ -110,7 +110,7 @@ def upgrade():
         sa.Column('resolution', sa.Text(), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('resolved_at', sa.DateTime(timezone=True), nullable=True),
-        sa.ForeignKeyConstraint(['pilot_id'], ['pilot_configuration'], ondelete='SET NULL'),
+        sa.ForeignKeyConstraint(['pilot_id'], ['pilot_configuration.pilot_id'], ondelete='SET NULL'),
         sa.PrimaryKeyConstraint('escalation_id')
     )
     
@@ -162,7 +162,7 @@ def upgrade():
         sa.Column('total_nvedo_review_time_hours', sa.Float(), nullable=True),
         sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
         sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-        sa.ForeignKeyConstraint(['job_id'], ['role_definitions'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['job_id'], ['role_definitions.role_id'], ondelete='CASCADE'),
         sa.PrimaryKeyConstraint('governance_id')
     )
     
