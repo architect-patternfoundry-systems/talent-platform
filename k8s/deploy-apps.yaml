@@ -107,17 +107,24 @@ spec:
   - port: 8000
     targetPort: 8000
 ---
+apiVersion: tailscale.com/v1alpha1
+kind: ProxyGroup
+metadata:
+  name: talent-platform-dev
+  labels:
+    app.kubernetes.io/managed-by: tilt
+spec:
+  proxyClass: default
+  replicas: 1
+  type: ingress
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: talent-platform-dev
   namespace: talent-platform-dev
-  annotations:
-    tailscale.com/tls-cert: "true"
   labels:
     app.kubernetes.io/managed-by: tilt
-    sovereign.locus/project: talent-platform
-    env.talent-platform.io/mode: dev
 spec:
   ingressClassName: tailscale
   rules:
