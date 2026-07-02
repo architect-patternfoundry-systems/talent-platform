@@ -112,14 +112,14 @@ kind: Ingress
 metadata:
   name: talent-platform-dev
   namespace: talent-platform-dev
+  annotations:
+    tailscale.com/tls-cert: "true"
   labels:
+    app.kubernetes.io/managed-by: tilt
     sovereign.locus/project: talent-platform
     env.talent-platform.io/mode: dev
 spec:
   ingressClassName: tailscale
-  tls:
-  - hosts:
-    - talent-platform-dev.tailc2cafc.ts.net
   rules:
   - host: talent-platform-dev.tailc2cafc.ts.net
     http:
@@ -166,6 +166,9 @@ spec:
             name: talent-platform-api
             port:
               number: 8000
+  tls:
+  - hosts:
+    - talent-platform-dev.tailc2cafc.ts.net
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget

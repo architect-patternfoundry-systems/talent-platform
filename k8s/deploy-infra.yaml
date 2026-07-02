@@ -64,6 +64,9 @@ spec:
         cidr: 100.64.0.0/10
     - ipBlock:
         cidr: 10.42.0.0/16
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: tailscale
 ---
 # Allow intra-namespace traffic
 apiVersion: networking.k8s.io/v1
